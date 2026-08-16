@@ -1,0 +1,50 @@
+---
+title: HarmonyOS ArkUI 状态管理踩坑记
+description: "@State、@Prop、@Link、@Observed…… ArkUI 的状态装饰器家族，一不小心就会用错。"
+pubDate: 2026-06-28
+tags: [HarmonyOS, ArkUI, 开发笔记]
+---
+
+最近在 HarmonyOS 上重写一个小工具，ArkUI 的声明式写法整体体验不错，但状态管理这块着实踩了几个坑。记录下来，免得下次再掉进去。
+
+## 坑一：@State 管不住嵌套对象
+
+`@State` 只能观察到第一层属性的变化。下面这种写法，界面是不会刷新的：
+
+```typescript
+@State user: UserInfo = { name: 'Hisakazu', profile: { avatar: 'a.png' } };
+
+// ❌ 不会触发 UI 更新
+this.user.profile.avatar = 'b.png';
+```
+
+解决办法是给嵌套的类加上 `@Observed`，子组件用 `@ObjectLink` 接收：
+
+```typescript
+@Observed
+class Profile {
+  avatar: string = 'a.png';
+}
+
+@Component
+struct AvatarView {
+  @ObjectLink profile: Profile; // ✅ 深层变化也能响应
+}
+```
+
+## 坑二：@Prop 是拷贝，@Link 才是引用
+
+从父组件传值时，`@Prop` 做的是**深拷贝**——子组件改了，父组件无感知；父组件更新，还会把子组件的本地修改覆盖掉。想双向同步，老老实实上 `@Link`。
+
+## 坑三：数组的"假更新"
+
+`@State` 数组调用 `splice`、`sort` 原地修改后，某些场景下渲染结果和预期不一致。稳妥做法是返回新数组：
+
+```typescript
+// ✅ 用不可变的方式更新
+this.items = [...this.items].sort((a, b) => a.id - b.id);
+```
+
+---
+
+ArkUI 的状态系统本质上是一套基于装饰器的依赖追踪。理解了"观察的是引用，不是值"这句话，大部分坑就都能预判了。

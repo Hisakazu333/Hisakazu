@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base title="文章 · Hisakazu" description="Hisakazu 的全部随笔与开发笔记。">
+  <header class="page-head">
+    <h1>文章与随笔</h1>
+    <p class="sub">技术复盘、产品思考，以及偶尔闪现的生活切片。</p>
+  </header>
+
+  <div class="article-list" style="margin-bottom: 96px;">
+    {
+      articles.map((a) => (
+        <a class="article-row" href={`/articles/${a.id}/`}>
+          <div class="row-top">
+            <h3>{a.data.title}</h3>
+            <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14m-6-6 6 6-6 6" />
+            </svg>
+          </div>
+          <p class="excerpt">{a.data.description}</p>
+          <time datetime={a.data.pubDate.toISOString()}>{formatDate(a.data.pubDate)}</time>
+        </a>
+      ))
+    }
+  </div>
+</Base>

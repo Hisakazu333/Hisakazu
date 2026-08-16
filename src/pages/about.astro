@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+
+const movies = ['《星际穿越》', '《千与千寻》', '《机器人总动员》', '《her》', '《银翼杀手 2049》'];
+const gears = ['MacBook Pro 14"', 'HHKB Professional 2', 'LG UltraFine 4K', '升降桌 + 人体工学椅', '一猫一绿植'];
+---
+
+<Base title="关于 · Hisakazu" description="关于 Hisakazu 与这个博客。">
+  <header class="page-head">
+    <h1>关于我</h1>
+    <p class="sub">在效率与诗意之间寻找平衡的开发者。</p>
+  </header>
+
+  <div class="about-cover">
+    <svg viewBox="0 0 1080 560" role="img" aria-label="抽象封面">
+      <rect width="1080" height="560" fill="#e8e8ea" />
+      <rect x="620" y="90" width="260" height="380" fill="#f4f4f5" />
+      <rect x="700" y="170" width="180" height="300" fill="#dc2626" />
+      <rect x="180" y="200" width="240" height="220" fill="#18181b" />
+      <rect x="180" y="200" width="240" height="14" fill="#3f3f46" />
+      <circle cx="230" cy="207" r="4" fill="#71717a" />
+      <circle cx="248" cy="207" r="4" fill="#71717a" />
+      <rect x="204" y="236" width="140" height="8" fill="#3f3f46" />
+      <rect x="204" y="256" width="180" height="8" fill="#3f3f46" />
+      <rect x="204" y="276" width="100" height="8" fill="#3f3f46" />
+      <rect x="204" y="296" width="160" height="8" fill="#3f3f46" />
+      <rect x="204" y="316" width="120" height="8" fill="#16a34a" />
+    </svg>
+  </div>
+
+  <div class="about-grid" style="border-top: none; padding-top: 0;">
+    <h2>故事</h2>
+    <div class="prose" style="font-size: 15.5px;">
+      <p>
+        写代码有些年头了，前后端都做过。现在最感兴趣的方向是 AI 伙伴与独立产品——
+        我相信好的工具应该安静、克制，待在用户不碍事的地方。
+      </p>
+      <p>
+        业余时间在养两个项目：<strong>NekoPapa</strong>（一次关于 AI 伙伴形态的探索）和
+        <strong>NekoDrop</strong>（一个反复重构中的传输协议实验）。
+        偶尔也折腾 HarmonyOS 与 ArkUI，踩过的坑都写在了随笔里。
+      </p>
+      <p>
+        这个博客不追求流量，没有追踪脚本。只是一些我觉得值得留下来的片段。
+      </p>
+    </div>
+  </div>
+
+  <div class="about-grid">
+    <h2>喜欢的电影</h2>
+    <ul>
+      {movies.map((m) => <li>{m}</li>)}
+    </ul>
+  </div>
+
+  <div class="about-grid">
+    <h2>桌面装备</h2>
+    <ul>
+      {gears.map((g) => <li>{g}</li>)}
+    </ul>
+  </div>
+
+  <div style="margin-bottom: 96px;"></div>
+</Base>

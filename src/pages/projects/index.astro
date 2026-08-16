@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+
+const rendered = await Promise.all(
+  projects.map(async (p) => ({ project: p, Content: (await render(p)).Content })),
+);
+---
+
+<Base title="项目 · Hisakazu" description="Hisakazu 正在做和做过的项目。">
+  <header class="page-head">
+    <h1>项目</h1>
+    <p class="sub">慢慢打磨的一些东西，不追求快，只希望经得起时间。</p>
+  </header>
+
+  <div style="display: grid; gap: 64px; margin-bottom: 96px;">
+    {
+      rendered.map(({ project: p, Content }) => (
+        <article id={p.id}>
+          <div class="work-card" style="cursor: default;">
+            <div class="cover">
+              <img src={p.data.cover} alt={`${p.data.title} 封面`} loading="lazy" />
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: 18px;">
+            <h3 style="margin: 0; font-size: 18px; font-weight: 650;">{p.data.title}</h3>
+            <span style="font-family: var(--font-mono); font-size: 11.5px; color: var(--accent); background: rgba(22,163,74,.1); padding: 3px 10px; border-radius: 99px;">
+              {p.data.status}
+            </span>
+          </div>
+          <p style="margin: 6px 0 0; color: var(--ink-secondary); font-size: 15px;">{p.data.description}</p>
+          <div class="prose" style="margin-top: 8px; font-size: 15px;">
+            <Content />
+          </div>
+          <div style="display: flex; gap: 20px; margin-top: 8px; font-size: 14px; font-weight: 500;">
+            {p.data.link && (
+              <a href={p.data.link} target="_blank" rel="noopener" style="border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px;">
+                访问 →
+              </a>
+            )}
+            {p.data.repo && (
+              <a href={p.data.repo} target="_blank" rel="noopener" style="border-bottom: 1px dashed var(--line-strong); padding-bottom: 1px;">
+                源码 →
+              </a>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</Base>

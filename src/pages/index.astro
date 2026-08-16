@@ -1,0 +1,95 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base title="Hisakazu — 个人博客">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="avatar">
+      <img src="/avatar.jpeg" alt="Hisakazu 的头像" />
+    </div>
+    <h1>你好，我是 Hisakazu</h1>
+    <p class="sub">独立开发者，喜欢把想法从草图做到上线。白天写代码，晚上也写代码。</p>
+    <a class="mail" href="mailto:hisakazu333@foxmail.com">hisakazu333@foxmail.com</a>
+  </section>
+
+  <!-- Selected work -->
+  <section class="section">
+    <div class="section-head">
+      <h2>精选项目</h2>
+      <a class="more" href="/projects/">查看全部</a>
+    </div>
+    <div class="work-grid">
+      {
+        projects.slice(0, 4).map((p) => (
+          <a class="work-card" href="/projects/">
+            <div class="cover">
+              <img src={p.data.cover} alt={`${p.data.title} 封面`} loading="lazy" />
+            </div>
+            <h3>{p.data.title}</h3>
+            <p>{p.data.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section class="section">
+    <div class="section-head">
+      <h2>我的技术栈</h2>
+    </div>
+    <div class="stack-row">
+      {
+        [
+          { icon: '/icons/stack/typescript.svg', name: 'TypeScript' },
+          { icon: '/icons/stack/java.svg', name: 'Java' },
+          { icon: '/icons/stack/harmonyos.svg', name: 'HarmonyOS' },
+          { icon: '/icons/stack/nodedotjs.svg', name: 'Node.js' },
+          { icon: '/icons/stack/rust.svg', name: 'Rust' },
+          { icon: '/icons/stack/docker.svg', name: 'Docker' },
+          { icon: '/icons/stack/git.svg', name: 'Git' },
+          { icon: '/icons/stack/python.svg', name: 'Python' },
+        ].map((s) => (
+          <div class="stack-item">
+            <img src={s.icon} alt={s.name} width="36" height="36" loading="lazy" />
+            <span class="stack-tip">{s.name}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Latest writing -->
+  <section class="section">
+    <div class="section-head">
+      <h2>最新随笔</h2>
+      <a class="more" href="/articles/">阅读全部</a>
+    </div>
+    <div class="article-list">
+      {
+        articles.slice(0, 3).map((a) => (
+          <a class="article-row" href={`/articles/${a.id}/`}>
+            <div class="row-top">
+              <h3>{a.data.title}</h3>
+              <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </div>
+            <p class="excerpt">{a.data.description}</p>
+            <time datetime={a.data.pubDate.toISOString()}>{formatDate(a.data.pubDate)}</time>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Base>

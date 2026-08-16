@@ -1,0 +1,180 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Hisakazu 的个人博客 —— 记录代码、产品与生活的片段。',
+} = Astro.props;
+
+const path = Astro.url.pathname;
+
+const nav = [
+  {
+    href: '/',
+    label: '首页',
+    icon: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+  },
+  {
+    href: '/projects/',
+    label: '项目',
+    icon: '<path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5m0 0 9-5m-9 5v8"/>',
+  },
+  {
+    href: '/about/',
+    label: '关于',
+    icon: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/>',
+  },
+  {
+    href: '/articles/',
+    label: '文章',
+    icon: '<path d="m14 4 6 6L8.5 21.5H2.5v-6zM12 6l6 6"/>',
+  },
+];
+
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+
+// 页脚贡献图数据（确定性伪随机）
+let seed = 42;
+const rand = () => {
+  seed = (seed * 1103515245 + 12345) % 2147483648;
+  return seed / 2147483648;
+};
+const WEEKS = 40;
+const today = new Date();
+const weeks = Array.from({ length: WEEKS }, (_, w) => {
+  const d = new Date(today);
+  d.setDate(d.getDate() - (WEEKS - 1 - w) * 7);
+  const dateStr = d.toISOString().slice(0, 10);
+  const cells = Array.from({ length: 7 }, () => {
+    const r = rand();
+    const level = r < 0.42 ? 0 : r < 0.62 ? 1 : r < 0.78 ? 2 : r < 0.9 ? 3 : 4;
+    return { level, count: level === 0 ? 0 : Math.floor(rand() * 12) + 1 };
+  });
+  return { dateStr, cells };
+});
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/jpeg" href="/avatar.jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <script is:inline>
+      // 避免暗色模式闪烁
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.dataset.theme = 'dark';
+      }
+    </script>
+  </head>
+  <body>
+    <div class="shell">
+      <nav class="site-nav" aria-label="主导航">
+        <div class="nav-group">
+          {
+            nav.map((item) => (
+              <a
+                class="icon-btn"
+                href={item.href}
+                aria-label={item.label}
+                title={item.label}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={item.icon} />
+              </a>
+            ))
+          }
+        </div>
+        <div class="nav-group">
+          <button class="icon-btn" id="theme-toggle" aria-label="切换主题">
+            <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4m11.4-11.4 1.4-1.4"/>
+            </svg>
+            <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+            </svg>
+          </button>
+          <a class="icon-btn" href="https://github.com/Hisakazu333" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.1.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85V21c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+          </a>
+        </div>
+      </nav>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <div class="contrib" id="contrib" aria-hidden="true">
+          {
+            weeks.map((week) => (
+              <div class="contrib-col">
+                {week.cells.map((c) => (
+                  <i class={`cg cg-${c.level}`} data-tip={`${c.count} contributions on ${week.dateStr}`} />
+                ))}
+              </div>
+            ))
+          }
+        </div>
+        <div class="cg-tip" id="cg-tip"></div>
+        <a class="mail" href="mailto:hisakazu333@foxmail.com">hisakazu333@foxmail.com</a>
+        <p class="fine">© {new Date().getFullYear()} Hisakazu · Built with Astro</p>
+      </footer>
+    </div>
+
+    <script is:inline>
+      const btn = document.getElementById('theme-toggle');
+      const sun = document.getElementById('icon-sun');
+      const moon = document.getElementById('icon-moon');
+      const sync = () => {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        sun.style.display = dark ? 'none' : '';
+        moon.style.display = dark ? '' : 'none';
+      };
+      sync();
+      btn.addEventListener('click', () => {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        if (dark) {
+          delete document.documentElement.dataset.theme;
+          localStorage.setItem('theme', 'light');
+        } else {
+          document.documentElement.dataset.theme = 'dark';
+          localStorage.setItem('theme', 'dark');
+        }
+        sync();
+      });
+    </script>
+    <script is:inline>
+      // 贡献图 tooltip（放在 body 末尾，确保 DOM 已就绪）
+      const contrib = document.getElementById('contrib');
+      const tip = document.getElementById('cg-tip');
+      if (contrib && tip) {
+        contrib.addEventListener('mouseover', (e) => {
+          const cell = e.target.closest('.cg');
+          if (!cell) return;
+          tip.textContent = cell.dataset.tip;
+          const r = cell.getBoundingClientRect();
+          const fr = contrib.closest('.site-footer').getBoundingClientRect();
+          tip.style.left = r.left - fr.left + r.width / 2 + 'px';
+          tip.style.top = r.top - fr.top + 'px';
+          tip.classList.add('show');
+        });
+        contrib.addEventListener('mouseleave', () => tip.classList.remove('show'));
+      }
+    </script>
+  </body>
+</html>
