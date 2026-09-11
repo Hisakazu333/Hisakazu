@@ -5,7 +5,7 @@ const publications = [
   {
     title:
       'Self-Certification of Representation Adequacy: Sequential Certification at Minimum Task Loss',
-    venue: 'arXiv:2608.02267 [cs.AI], Aug 2026',
+    meta: 'arXiv:2608.02267 [cs.AI] · Aug 2026',
     url: 'https://arxiv.org/abs/2608.02267',
   },
 ];
@@ -13,31 +13,31 @@ const publications = [
 const projects = [
   {
     name: 'NekoPapa',
-    desc: 'An exploration of AI companions — presence over cleverness.',
+    meta: 'An exploration of AI companions — presence over cleverness.',
     url: 'https://github.com/Hisakazu333/nekopapa',
   },
   {
     name: 'NekoDrop',
-    desc: 'A lightweight transfer-protocol experiment, built to last.',
+    meta: 'A lightweight transfer-protocol experiment, built to last.',
     url: 'https://github.com/Hisakazu333/nekodrop',
   },
 ];
 ---
 
 <Base title="Zijie Huang">
+  <div class="masthead">
+    <span>Personal homepage</span>
+    <span>hisakazu.dev</span>
+  </div>
+
   <header>
-    <img class="avatar" src="/avatar.jpeg" alt="Zijie Huang" width="72" height="72" />
+    <img class="avatar" src="/avatar.jpeg" alt="Zijie Huang" />
     <h1>Zijie Huang</h1>
-    <p class="tagline">Independent developer</p>
-    <p>
+    <p class="tagline">Independent developer, studying machine learning</p>
+    <p class="email">
       <a href="mailto:huangzijie@cuyitech.com">huangzijie@cuyitech.com</a>
     </p>
   </header>
-
-  <p>
-    I build quiet, useful tools, and I'm currently interested in machine learning.
-    This page serves as my verified personal homepage.
-  </p>
 
   <section>
     <h2>Publications</h2>
@@ -45,8 +45,8 @@ const projects = [
       {
         publications.map((p) => (
           <li>
-            <a href={p.url}>{p.title}</a>
-            <span class="desc">{p.venue}</span>
+            <a class="item-title" href={p.url}>{p.title}</a>
+            <span class="item-meta">{p.meta}</span>
           </li>
         ))
       }
@@ -59,8 +59,8 @@ const projects = [
       {
         projects.map((p) => (
           <li>
-            <a href={p.url}>{p.name}</a>
-            <span class="desc">{p.desc}</span>
+            <a class="item-title" href={p.url}>{p.name}</a>
+            <span class="item-meta">{p.meta}</span>
           </li>
         ))
       }
@@ -70,8 +70,8 @@ const projects = [
   <section>
     <h2>Elsewhere</h2>
     <ul class="item-list">
-      <li><a href="https://github.com/Hisakazu333">GitHub</a></li>
-      <li><a href="mailto:huangzijie@cuyitech.com">Email</a></li>
+      <li><a class="item-title" href="https://github.com/Hisakazu333">GitHub</a></li>
+      <li><a class="item-title" href="mailto:huangzijie@cuyitech.com">Email</a></li>
     </ul>
   </section>
 </Base>

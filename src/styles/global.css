@@ -1,16 +1,20 @@
 :root {
-  --fg: #1a1a1a;
-  --fg-muted: #666;
-  --bg: #fff;
-  --link: #1a1a1a;
+  --paper: #fafaf7;
+  --ink: #1c1c1a;
+  --muted: #6d6d66;
+  --rule: rgba(28, 28, 26, 0.16);
+  --accent: #2b47c9;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --fg: #e5e5e5;
-    --fg-muted: #999;
-    --bg: #161616;
-    --link: #e5e5e5;
+    --paper: #14161b;
+    --ink: #e7e7e2;
+    --muted: #9a9a92;
+    --rule: rgba(231, 231, 226, 0.16);
+    --accent: #96a8ff;
   }
 }
 
@@ -20,99 +24,152 @@
 
 body {
   margin: 0;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.65;
-  color: var(--fg);
-  background: var(--bg);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
 }
 
 main,
 footer {
-  max-width: 640px;
+  max-width: 620px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
 main {
-  padding-top: 20vh;
+  padding-top: 14vh;
 }
 
-header {
+/* ——— preprint-style author block ——— */
+
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.6rem;
   margin-bottom: 2.5rem;
 }
 
+header {
+  margin-bottom: 2.25rem;
+}
+
 .avatar {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 h1 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin: 0 0 0.25rem;
+  font-size: 2.1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.35rem;
+}
+
+.tagline {
+  font-style: italic;
+  color: var(--muted);
+  margin: 0 0 0.6rem;
+}
+
+.email {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ——— sections ——— */
+
+section {
+  border-top: 1px solid var(--rule);
+  margin-top: 2.25rem;
+  padding-top: 0.25rem;
 }
 
 h2 {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--fg-muted);
-  margin: 2.5rem 0 0.5rem;
+  color: var(--muted);
+  margin: 0.9rem 0 0.9rem;
 }
 
 p {
   margin: 0.75rem 0;
 }
 
-.tagline {
-  color: var(--fg-muted);
-  margin: 0 0 0.5rem;
-}
-
-section {
-  border-top: 1px solid color-mix(in srgb, var(--fg-muted) 25%, transparent);
-  margin-top: 2.5rem;
-  padding-top: 0.5rem;
-}
-
 .item-list {
   list-style: none;
+  margin: 0;
   padding: 0;
 }
 
 .item-list li {
-  margin: 0.75rem 0;
+  margin: 0 0 1.1rem;
 }
 
-.item-list .desc {
+.item-list li:last-child {
+  margin-bottom: 0;
+}
+
+.item-title {
+  font-size: 1.02rem;
+  font-weight: 500;
+}
+
+.item-meta {
   display: block;
-  color: var(--fg-muted);
-  font-size: 0.9rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
 }
 
-ul {
-  margin: 0;
-  padding-left: 1.25rem;
-}
+/* ——— links ——— */
 
 a {
-  color: var(--link);
+  color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-color: color-mix(in srgb, var(--link) 40%, transparent);
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 a:hover {
-  text-decoration-color: var(--link);
+  text-decoration-color: var(--accent);
 }
 
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ——— footer ——— */
+
 footer {
-  margin-top: 6rem;
+  margin-top: 5rem;
   padding-bottom: 3rem;
-  font-size: 0.85rem;
-  color: var(--fg-muted);
+}
+
+footer p {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 0.9rem;
 }
