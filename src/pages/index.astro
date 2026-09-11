@@ -1,95 +1,77 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
-const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const publications = [
+  {
+    title:
+      'Self-Certification of Representation Adequacy: Sequential Certification at Minimum Task Loss',
+    venue: 'arXiv:2608.02267 [cs.AI], Aug 2026',
+    url: 'https://arxiv.org/abs/2608.02267',
+  },
+];
 
-const formatDate = (d: Date) =>
-  d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+const projects = [
+  {
+    name: 'NekoPapa',
+    desc: 'An exploration of AI companions — presence over cleverness.',
+    url: 'https://github.com/Hisakazu333/nekopapa',
+  },
+  {
+    name: 'NekoDrop',
+    desc: 'A lightweight transfer-protocol experiment, built to last.',
+    url: 'https://github.com/Hisakazu333/nekodrop',
+  },
+];
 ---
 
-<Base title="Hisakazu — 个人博客">
-  <!-- Hero -->
-  <section class="hero">
-    <div class="avatar">
-      <img src="/avatar.jpeg" alt="Hisakazu 的头像" />
-    </div>
-    <h1>你好，我是 Zijie Huang（Hisakazu）</h1>
-    <p class="sub">独立开发者，喜欢把想法从草图做到上线。白天写代码，晚上也写代码。</p>
-    <a class="mail" href="mailto:huangzijie@cuyitech.com">huangzijie@cuyitech.com</a>
-  </section>
+<Base title="Zijie Huang">
+  <header>
+    <img class="avatar" src="/avatar.jpeg" alt="Zijie Huang" width="72" height="72" />
+    <h1>Zijie Huang</h1>
+    <p class="tagline">Independent developer</p>
+    <p>
+      <a href="mailto:huangzijie@cuyitech.com">huangzijie@cuyitech.com</a>
+    </p>
+  </header>
 
-  <!-- Selected work -->
-  <section class="section">
-    <div class="section-head">
-      <h2>精选项目</h2>
-      <a class="more" href="/projects/">查看全部</a>
-    </div>
-    <div class="work-grid">
+  <p>
+    I build quiet, useful tools, and I'm currently interested in machine learning.
+    This page serves as my verified personal homepage.
+  </p>
+
+  <section>
+    <h2>Publications</h2>
+    <ul class="item-list">
       {
-        projects.slice(0, 4).map((p) => (
-          <a class="work-card" href="/projects/">
-            <div class="cover">
-              <img src={p.data.cover} alt={`${p.data.title} 封面`} loading="lazy" />
-            </div>
-            <h3>{p.data.title}</h3>
-            <p>{p.data.description}</p>
-          </a>
+        publications.map((p) => (
+          <li>
+            <a href={p.url}>{p.title}</a>
+            <span class="desc">{p.venue}</span>
+          </li>
         ))
       }
-    </div>
+    </ul>
   </section>
 
-  <!-- Stack -->
-  <section class="section">
-    <div class="section-head">
-      <h2>我的技术栈</h2>
-    </div>
-    <div class="stack-row">
+  <section>
+    <h2>Projects</h2>
+    <ul class="item-list">
       {
-        [
-          { icon: '/icons/stack/typescript.svg', name: 'TypeScript' },
-          { icon: '/icons/stack/java.svg', name: 'Java' },
-          { icon: '/icons/stack/harmonyos.svg', name: 'HarmonyOS' },
-          { icon: '/icons/stack/nodedotjs.svg', name: 'Node.js' },
-          { icon: '/icons/stack/rust.svg', name: 'Rust' },
-          { icon: '/icons/stack/docker.svg', name: 'Docker' },
-          { icon: '/icons/stack/git.svg', name: 'Git' },
-          { icon: '/icons/stack/python.svg', name: 'Python' },
-        ].map((s) => (
-          <div class="stack-item">
-            <img src={s.icon} alt={s.name} width="36" height="36" loading="lazy" />
-            <span class="stack-tip">{s.name}</span>
-          </div>
+        projects.map((p) => (
+          <li>
+            <a href={p.url}>{p.name}</a>
+            <span class="desc">{p.desc}</span>
+          </li>
         ))
       }
-    </div>
+    </ul>
   </section>
 
-  <!-- Latest writing -->
-  <section class="section">
-    <div class="section-head">
-      <h2>最新随笔</h2>
-      <a class="more" href="/articles/">阅读全部</a>
-    </div>
-    <div class="article-list">
-      {
-        articles.slice(0, 3).map((a) => (
-          <a class="article-row" href={`/articles/${a.id}/`}>
-            <div class="row-top">
-              <h3>{a.data.title}</h3>
-              <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14m-6-6 6 6-6 6" />
-              </svg>
-            </div>
-            <p class="excerpt">{a.data.description}</p>
-            <time datetime={a.data.pubDate.toISOString()}>{formatDate(a.data.pubDate)}</time>
-          </a>
-        ))
-      }
-    </div>
+  <section>
+    <h2>Elsewhere</h2>
+    <ul class="item-list">
+      <li><a href="https://github.com/Hisakazu333">GitHub</a></li>
+      <li><a href="mailto:huangzijie@cuyitech.com">Email</a></li>
+    </ul>
   </section>
 </Base>
