@@ -12,14 +12,18 @@ const publications = [
 
 const projects = [
   {
-    name: 'NekoPapa',
-    meta: 'An exploration of AI companions — presence over cleverness.',
-    url: 'https://github.com/Hisakazu333/nekopapa',
+    name: 'NekoDrop',
+    meta: 'Local-first LAN file transfer for macOS & Windows — trusted pairing, encrypted sessions, resume support. Rust · Tauri',
+    url: 'https://github.com/Hisakazu333/NekoDrop',
   },
   {
-    name: 'NekoDrop',
-    meta: 'A lightweight transfer-protocol experiment, built to last.',
-    url: 'https://github.com/Hisakazu333/nekodrop',
+    name: 'NekoPapa',
+    meta: 'An exploration of AI companions — presence over cleverness.',
+  },
+  {
+    name: 'Hisakazu.dev',
+    meta: 'This site — Astro, statically generated, no tracking.',
+    url: 'https://github.com/Hisakazu333/Hisakazu',
   },
 ];
 ---
@@ -59,7 +63,11 @@ const projects = [
       {
         projects.map((p) => (
           <li>
-            <a class="item-title" href={p.url}>{p.name}</a>
+            {p.url ? (
+              <a class="item-title" href={p.url}>{p.name}</a>
+            ) : (
+              <span class="item-title">{p.name}</span>
+            )}
             <span class="item-meta">{p.meta}</span>
           </li>
         ))
