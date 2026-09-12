@@ -6,7 +6,7 @@ Personal homepage of Zijie Huang, used for identity verification
 ## 技术栈
 
 - [Astro](https://astro.build) — 静态站点生成，输出单个 `index.html`
-- 系统字体 + `prefers-color-scheme` 自动暗色，零 JS
+- 白底 serif 学术风，零 JS
 
 ## 开发
 
